@@ -4,3 +4,7 @@
 
 export * from './manifest.entity';
 export * from './stats.entity';
+export * from './dto/docket.dto';
+export * from './dto/manifest.dto';
+export * from './dto/stats.dto';
+export * from './dto/summary.dto';

@@ -1,5 +1,10 @@
 import { StageManifestCommand } from '../stage-manifest.command';
-import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import {
+  CommandHandler,
+  EventBus,
+  EventPublisher,
+  ICommandHandler,
+} from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Manifest } from '../../../../domain';
 import { Repository } from 'typeorm';
@@ -12,7 +17,7 @@ export class StageManifestHandler
   constructor(
     @InjectRepository(Manifest)
     private readonly repository: Repository<Manifest>,
-    private readonly eventBus: EventBus,
+    private readonly publisher: EventPublisher,
   ) {}
 
   async execute(command: StageManifestCommand): Promise<any> {
@@ -30,6 +35,8 @@ export class StageManifestHandler
       Logger.log(
         `Manifest logged: ${saved.facilityCode} - ${saved.facilityName}`,
       );
+
+      this.publisher.mergeObjectContext(manifest).commit();
       return saved;
     }
     Logger.error('Failed to read manifest');
