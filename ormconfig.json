@@ -1,0 +1,9 @@
+{
+  "type": "mssql",
+  "host": "localhost",
+  "username": "hts",
+  "password": "c0nstella",
+  "database": "livesync",
+  "entities": ["src/**/*.entity{.ts,.js}"],
+  "synchronize": true
+}
