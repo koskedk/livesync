@@ -1,8 +1,8 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Stats } from '../../../../domain';
 import { Repository } from 'typeorm';
 import { GetStatsQuery } from '../get-stats-query';
+import { Stats } from '../../../../domain/stats.entity';
 
 @QueryHandler(GetStatsQuery)
 export class GetStatsHandler implements IQueryHandler<GetStatsQuery, any> {

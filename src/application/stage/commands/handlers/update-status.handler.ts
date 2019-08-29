@@ -1,10 +1,11 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Manifest, Stats } from '../../../../domain';
 import { Repository } from 'typeorm';
 import { plainToClass } from 'class-transformer';
 import { Logger } from '@nestjs/common';
 import { UpdateStatusCommand } from '../update-status.command';
+import { Manifest } from '../../../../domain/manifest.entity';
+import { Stats } from '../../../../domain/stats.entity';
 
 @CommandHandler(UpdateStatusCommand)
 export class UpdateStatusHandler

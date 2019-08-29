@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
 import { StatsDto } from './dto/stats.dto';
 import { AggregateRoot } from '@nestjs/cqrs';
-import { ManifestStagedEvent } from '../application';
+import { ManifestStagedEvent } from '../application/stage/events/manifest.staged.event';
 
 @Entity()
 export class Stats extends AggregateRoot {

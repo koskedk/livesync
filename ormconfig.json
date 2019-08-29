@@ -4,6 +4,6 @@
   "username": "sa",
   "password": "M@un1983",
   "database": "livesync",
-  "entities": ["src/**/*.entity{.ts,.js}"],
+  "entities": ["dist/**/*.entity{.ts,.js}"],
   "synchronize": true
 }

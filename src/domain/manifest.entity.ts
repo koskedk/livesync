@@ -1,10 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
-import { AggregateRoot } from '@nestjs/cqrs';
 import { ManifestStagedEvent } from '../application/stage/events/manifest.staged.event';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { AggregateRoot } from '@nestjs/cqrs';
 
 @Entity()
 export class Manifest extends AggregateRoot {
-  @PrimaryColumn({ type: 'uuid' })
+  @PrimaryColumn('uuid')
   id: string;
 
   @Column({ type: 'int' })
@@ -25,20 +25,21 @@ export class Manifest extends AggregateRoot {
   @Column({ type: 'int' })
   patientCount: number;
 
-  @Column('text')
+  @Column({ type: 'text', nullable: true })
   cargo: string;
 
-  @Column({ type: 'boolean' })
-  isCurrent: boolean;
-
-  @Column()
+  @Column({ type: 'text', nullable: true })
   status: string;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: 'datetime', nullable: true })
   statusDate: Date;
 
-  @Column('text')
+  @Column({ type: 'text', nullable: true })
   statusInfo: string;
+
+  constructor() {
+    super();
+  }
 
   initialize() {
     this.status = 'STAGED';

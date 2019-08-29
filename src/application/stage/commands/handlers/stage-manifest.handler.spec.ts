@@ -5,10 +5,11 @@ import { StageModule } from '../../stage.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { StageManifestHandler } from './stage-manifest.handler';
 import { StageManifestCommand } from '../stage-manifest.command';
-import { Manifest, Stats } from '../../../../domain';
 import { getTestManifests } from '../../../../../test/test.data';
 import { plainToClass } from 'class-transformer';
 import { Logger } from '@nestjs/common';
+import { Manifest } from '../../../../domain/manifest.entity';
+import { Stats } from '../../../../domain/stats.entity';
 
 describe('Stage Manifest Tests', () => {
   jest.setTimeout(30000);

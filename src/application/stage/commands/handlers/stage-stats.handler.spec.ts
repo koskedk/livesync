@@ -1,16 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CommandBus } from '@nestjs/cqrs';
-import * as uuid from 'uuid';
 import { StageModule } from '../../stage.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { StageManifestHandler } from './stage-manifest.handler';
-import { StageManifestCommand } from '../stage-manifest.command';
-import { Manifest, Stats } from '../../../../domain';
-import { getTestManifests, getTestStats } from '../../../../../test/test.data';
+import { getTestStats } from '../../../../../test/test.data';
 import { plainToClass } from 'class-transformer';
 import { Logger } from '@nestjs/common';
 import { StageStatsCommand } from '../stage-stats.command';
 import { StageStatsHandler } from './stage-stats.handler';
+import { Manifest } from '../../../../domain/manifest.entity';
+import { Stats } from '../../../../domain/stats.entity';
 
 describe('Stage Stats Tests', () => {
   jest.setTimeout(30000);

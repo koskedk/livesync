@@ -1,8 +1,8 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { GetManifestQuery } from '../get-manifest-query';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Manifest } from '../../../../domain';
 import { Repository } from 'typeorm';
+import { Manifest } from '../../../../domain/manifest.entity';
 
 @QueryHandler(GetManifestQuery)
 export class GetManifestHandler

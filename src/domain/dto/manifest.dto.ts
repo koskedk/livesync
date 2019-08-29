@@ -1,6 +1,6 @@
 export interface ManifestDto {
   id?: string;
-  fcilityCode?: number;
+  facilityCode?: number;
   facilityName?: string;
   docket?: string;
   logDate?: Date;

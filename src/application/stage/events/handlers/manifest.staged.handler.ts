@@ -8,9 +8,9 @@ import {
 import { Inject, Logger } from '@nestjs/common';
 import { ManifestStagedEvent } from '../manifest.staged.event';
 import { ClientProxy } from '@nestjs/microservices';
-import { GetManifestQuery } from '../../..';
 import { UpdateStatusCommand } from '../../commands/update-status.command';
-import { Manifest } from '../../../../domain';
+import { GetManifestQuery } from '../../queries/get-manifest-query';
+import { Manifest } from '../../../../domain/manifest.entity';
 
 @EventsHandler(ManifestStagedEvent)
 export class ManifestStagedHandler

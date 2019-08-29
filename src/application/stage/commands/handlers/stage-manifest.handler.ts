@@ -6,10 +6,10 @@ import {
   ICommandHandler,
 } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Manifest } from '../../../../domain';
 import { Repository } from 'typeorm';
 import { plainToClass } from 'class-transformer';
 import { Logger } from '@nestjs/common';
+import { Manifest } from '../../../../domain/manifest.entity';
 
 @CommandHandler(StageManifestCommand)
 export class StageManifestHandler

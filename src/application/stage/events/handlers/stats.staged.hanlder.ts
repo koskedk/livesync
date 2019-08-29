@@ -8,10 +8,12 @@ import {
 import { Inject, Logger } from '@nestjs/common';
 import { ManifestStagedEvent } from '../manifest.staged.event';
 import { StatsStagedEvent } from '../stats.staged.event';
-import { GetManifestQuery, GetStatsQuery } from '../../..';
-import { Manifest, Stats } from '../../../../domain';
 import { UpdateStatusCommand } from '../../commands/update-status.command';
 import { ClientProxy } from '@nestjs/microservices';
+import { GetStatsQuery } from '../../queries/get-stats-query';
+import { Stats } from '../../../../domain/stats.entity';
+import { GetManifestQuery } from '../../queries/get-manifest-query';
+import { Manifest } from '../../../../domain/manifest.entity';
 
 @EventsHandler(StatsStagedEvent)
 export class StatsStagedHanlder implements IEventHandler<StatsStagedEvent> {

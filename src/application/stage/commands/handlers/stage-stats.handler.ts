@@ -1,4 +1,3 @@
-import { StageManifestCommand } from '../stage-manifest.command';
 import {
   CommandHandler,
   EventBus,
@@ -7,11 +6,9 @@ import {
 } from '@nestjs/cqrs';
 import { StageStatsCommand } from '../stage-stats.command';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Manifest, Stats } from '../../../../domain';
 import { Repository } from 'typeorm';
-import { plainToClass } from 'class-transformer';
 import { Logger } from '@nestjs/common';
-import { StatsDto } from '../../../../domain/dto/stats.dto';
+import { Stats } from '../../../../domain/stats.entity';
 
 @CommandHandler(StageStatsCommand)
 export class StageStatsHandler implements ICommandHandler<StageStatsCommand> {
