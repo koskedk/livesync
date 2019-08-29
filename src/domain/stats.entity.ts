@@ -1,11 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
-import { StatsDto } from './dto/stats.dto';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
 import { AggregateRoot } from '@nestjs/cqrs';
-import { ManifestStagedEvent } from '../application/stage/events/manifest.staged.event';
+import { StatsStagedEvent } from '../application/stage/events/stats.staged.event';
+import * as uuid from 'uuid';
 
 @Entity()
 export class Stats extends AggregateRoot {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn('uuid')
   id: string;
 
   @Column({ type: 'int' })
@@ -32,10 +32,14 @@ export class Stats extends AggregateRoot {
   @Column({ type: 'text', nullable: true })
   statusInfo: string;
 
+  constructor() {
+    super();
+    this.id = uuid.v1();
+  }
   initialize() {
     this.status = 'STAGED';
     this.statusDate = new Date();
-    this.apply(new ManifestStagedEvent(this.id));
+    this.apply(new StatsStagedEvent(this.id));
   }
 
   markAsSent() {

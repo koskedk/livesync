@@ -1,3 +1,3 @@
 export class GetStatsQuery {
-  constructor(criteria?: any) {}
+  constructor(public criteria?: any) {}
 }

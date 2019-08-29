@@ -11,7 +11,9 @@ export class GetStatsHandler implements IQueryHandler<GetStatsQuery, any> {
     private readonly repository: Repository<Stats>,
   ) {}
 
-  execute(query: GetStatsQuery): Promise<any> {
-    return undefined;
+  async execute(query: GetStatsQuery): Promise<any> {
+    if (query.criteria) return await this.repository.find(query.criteria);
+
+    return await this.repository.find();
   }
 }

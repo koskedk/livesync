@@ -25,10 +25,11 @@ export class StatsStagedHanlder implements IEventHandler<StatsStagedEvent> {
   ) {}
 
   async handle(event: StatsStagedEvent) {
+    let statsz = [];
     Logger.debug(`=== StatsStagedEvent ===:${event.id}`);
 
-    const statsz = await this.queryBus.execute<GetStatsQuery, Stats[]>(
-      new GetManifestQuery({ id: event.id }),
+    statsz = await this.queryBus.execute<GetStatsQuery, Stats[]>(
+      new GetStatsQuery({ id: event.id }),
     );
 
     statsz.forEach(stats => {

@@ -23,9 +23,10 @@ export class ManifestStagedHandler
   ) {}
 
   async handle(event: ManifestStagedEvent) {
+    let manifests = [];
     Logger.debug(`=== ManifestStagedEvent ===:${event.id}`);
 
-    const manifests = await this.queryBus.execute<GetManifestQuery, Manifest[]>(
+    manifests = await this.queryBus.execute<GetManifestQuery, Manifest[]>(
       new GetManifestQuery({ id: event.id }),
     );
 

@@ -1,8 +1,8 @@
 {
   "type": "mssql",
-  "host": "localhost",
+  "host": "192.168.100.3\\sqlexpress",
   "username": "sa",
-  "password": "M@un1983",
+  "password": "maun",
   "database": "livesync",
   "entities": ["dist/**/*.entity{.ts,.js}"],
   "synchronize": true
