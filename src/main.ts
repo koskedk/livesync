@@ -10,6 +10,8 @@ async function bootstrap() {
   const microservice = app.connectMicroservice(config.QueueConfig);
   app.enableCors();
   await app.listen(config.Port);
-  await app.startAllMicroservicesAsync().catch(e => Logger.error(e));
+  await app
+    .startAllMicroservicesAsync()
+    .catch(e => Logger.error(`>>>>>> ${e}`));
 }
 bootstrap();

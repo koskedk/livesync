@@ -1,4 +1,5 @@
 import {
+  CommandBus,
   EventBus,
   EventsHandler,
   IEvent,
@@ -21,7 +22,7 @@ export class StatsStagedHanlder implements IEventHandler<StatsStagedEvent> {
     @Inject('STATS_SERVICE')
     private readonly client: ClientProxy,
     private readonly queryBus: QueryBus,
-    private readonly eventBus: EventBus,
+    private readonly commandBus: CommandBus,
   ) {}
 
   async handle(event: StatsStagedEvent) {
@@ -32,25 +33,20 @@ export class StatsStagedHanlder implements IEventHandler<StatsStagedEvent> {
       new GetStatsQuery({ id: event.id }),
     );
 
-    statsz.forEach(stats => {
-      this.client.emit('UpdateStatsEvent', JSON.stringify(stats)).subscribe(
-        m => {
-          Logger.log(m);
-          Logger.log('PUBLISHED');
-          this.eventBus.publish(
-            new UpdateStatusCommand(stats.id, Manifest.name, 'SENT'),
-          );
-        },
-        w => {
-          Logger.error(w);
-          this.eventBus.publish(
-            new UpdateStatusCommand(stats.id, Manifest.name, 'ERROR', w),
-          );
-        },
-        () => {
-          Logger.log('DONE');
-        },
-      );
-    });
+    for (const stats of statsz) {
+      try {
+        await this.client.emit('UpdateStatsEvent', stats).toPromise();
+        await this.client.emit('UpdateStatsEvent', stats).toPromise();
+        Logger.log('PUBLISHED');
+        await this.commandBus.execute(
+          new UpdateStatusCommand(stats.id, Stats.name, 'SENT'),
+        );
+      } catch (e) {
+        Logger.error(e);
+        this.commandBus.execute(
+          new UpdateStatusCommand(stats.id, Stats.name, 'ERROR', e),
+        );
+      }
+    }
   }
 }

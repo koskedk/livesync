@@ -20,6 +20,7 @@ import { MessagingModule } from '../../infrastructure/messging/messaging.module'
     CqrsModule,
     TypeOrmModule.forFeature([Manifest, Stats]),
   ],
+  // @ts-ignore
   providers: [
     StageManifestHandler,
     StageStatsHandler,

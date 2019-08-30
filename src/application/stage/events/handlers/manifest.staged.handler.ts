@@ -1,4 +1,5 @@
 import {
+  CommandBus,
   EventBus,
   EventsHandler,
   IEvent,
@@ -19,7 +20,7 @@ export class ManifestStagedHandler
     @Inject('STATS_SERVICE')
     private readonly client: ClientProxy,
     private readonly queryBus: QueryBus,
-    private readonly eventBus: EventBus,
+    private readonly commandBus: CommandBus,
   ) {}
 
   async handle(event: ManifestStagedEvent) {
@@ -30,25 +31,20 @@ export class ManifestStagedHandler
       new GetManifestQuery({ id: event.id }),
     );
 
-    manifests.forEach(manifest => {
-      this.client.emit('LogManifestEvent', JSON.stringify(manifest)).subscribe(
-        m => {
-          Logger.log(m);
-          Logger.log('PUBLISHED');
-          this.eventBus.publish(
-            new UpdateStatusCommand(manifest.id, Manifest.name, 'SENT'),
-          );
-        },
-        w => {
-          Logger.error(w);
-          this.eventBus.publish(
-            new UpdateStatusCommand(manifest.id, Manifest.name, 'ERROR', w),
-          );
-        },
-        () => {
-          Logger.log('DONE');
-        },
-      );
-    });
+    for (const manifest of manifests) {
+      try {
+        await this.client.emit('LogManifestEvent', manifest).toPromise();
+        await this.client.emit('LogManifestEvent', manifest).toPromise();
+
+        await this.commandBus.execute(
+          new UpdateStatusCommand(manifest.id, Manifest.name, 'SENT'),
+        );
+      } catch (e) {
+        Logger.error(`PUBLISH`, e);
+        await this.commandBus.execute(
+          new UpdateStatusCommand(manifest.id, Manifest.name, 'ERROR', e),
+        );
+      }
+    }
   }
 }
