@@ -13,10 +13,13 @@ import { StatsStagedHanlder } from './events/handlers/stats.staged.hanlder';
 import { GetManifestHandler } from './queries/handlers/get-manifest.handler';
 import { GetStatsHandler } from './queries/handlers/get-stats.handler';
 import { MessagingModule } from '../../infrastructure/messging/messaging.module';
+import { ConfigModule } from '../../config/config.module';
+import { MessagingService } from '../../infrastructure/messging/messaging.service';
 
 @Module({
   imports: [
     MessagingModule,
+    ConfigModule,
     CqrsModule,
     TypeOrmModule.forFeature([Manifest, Stats]),
   ],
@@ -30,6 +33,7 @@ import { MessagingModule } from '../../infrastructure/messging/messaging.module'
     StatsStagedHanlder,
     GetManifestHandler,
     GetStatsHandler,
+    MessagingService,
   ],
   controllers: [StagesController],
 })

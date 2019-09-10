@@ -11,8 +11,6 @@ import { ClientProxy, EventPattern } from '@nestjs/microservices';
 @Controller('stages')
 export class StagesController {
   constructor(
-    @Inject('STATS_SERVICE')
-    private readonly client: ClientProxy,
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
@@ -44,11 +42,5 @@ export class StagesController {
         statsDto.manifestId,
       ),
     );
-  }
-
-  @EventPattern('LogManifestEvent_ack')
-  ackMessageTestData(data: any) {
-    console.log(data.toString());
-    return 'Message Received';
   }
 }

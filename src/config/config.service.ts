@@ -3,6 +3,7 @@ import * as Joi from '@hapi/joi';
 import * as fs from 'fs';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { Logger } from '@nestjs/common';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 export interface EnvConfig {
   [key: string]: string;
@@ -27,24 +28,28 @@ export class ConfigService {
         .valid(['development', 'production', 'test', 'provision'])
         .default('development'),
       LIVESYNC_PORT: Joi.number().default(4777),
-      STATS_RABBITMQ_HOST: Joi.string().default('amqp://localhost:5672/spot'),
-      STATS_RABBITMQ_USER: Joi.string().default('guest'),
-      STATS_RABBITMQ_PASS: Joi.string().default('guest'),
-      STATS_RABBITMQ_QUEUE: Joi.string().default('stats_queue'),
-      GLOBE_RABBITMQ_HOST: Joi.string().default('amqp://localhost:5672/spot'),
-      GLOBE_RABBITMQ_USER: Joi.string().default('guest'),
-      GLOBE_RABBITMQ_PASS: Joi.string().default('guest'),
-      GLOBE_RABBITMQ_QUEUE: Joi.string().default('globe_queue'),
+      STATS_RABBITMQ_URI: Joi.string().default(
+        'amqp://guest:guest@localhost:5672/spot',
+      ),
+      STATS_RABBITMQ_EXCHANGE: Joi.string().default('stats.exchange'),
+      STATS_RABBITMQ_EXCHANGE_TYPE: Joi.string().default('direct'),
+      STATS_RABBITMQ_ROUTES: Joi.string().default('manifest.route|stats.route'),
+      GLOBE_RABBITMQ_URI: Joi.string().default(
+        'amqp://guest:guest@localhost:5672/spot',
+      ),
+      GLOBE_RABBITMQ_EXCHANGE: Joi.string().default('globe.exchange'),
+      GLOBE_RABBITMQ_EXCHANGE_TYPE: Joi.string().default('direct'),
+      GLOBE_RABBITMQ_ROUTE: Joi.string().default(
+        'practice.route|practice.queue',
+      ),
       LIVESYNC_DB_TYPE: Joi.string().default('mssql'),
       LIVESYNC_DB_HOST: Joi.string().default('localhost'),
       LIVESYNC_DB_PORT: Joi.number().default(1433),
       LIVESYNC_DB_USER: Joi.string().default('sa'),
       LIVESYNC_DB_PASS: Joi.string().default('M@un1983'),
       LIVESYNC_DB_NAME: Joi.string().default('livesync'),
+      LIVESYNC_ENTITIES: Joi.string().default('dist/**/*.entity{.ts,.js}'),
       LIVESYNC_DB_SYNC: Joi.boolean().default(true),
-      LIVESYNC_MONGODB_URI: Joi.string().default(
-        'mongodb://localhost/dwapiStats',
-      ),
     });
 
     const { error, value: validatedEnvConfig } = Joi.validate(
@@ -61,56 +66,66 @@ export class ConfigService {
     return Number(this.envConfig.LIVESYNC_PORT);
   }
 
-  get QueueHost(): string {
-    return String(this.envConfig.STATS_RABBITMQ_HOST);
+  get QueueStatsUri(): string {
+    return String(this.envConfig.STATS_RABBITMQ_URI);
   }
 
-  get QueueUser(): string {
-    return String(this.envConfig.STATS_RABBITMQ_USER);
+  get QueueStatsExchange(): string {
+    return String(this.envConfig.STATS_RABBITMQ_EXCHANGE);
   }
 
-  get QueuePassword(): string {
-    return String(this.envConfig.STATS_RABBITMQ_PASS);
+  get QueueStatsExchangeType(): string {
+    return String(this.envConfig.STATS_RABBITMQ_EXCHANGE_TYPE);
   }
 
-  get QueueName(): string {
-    return String(this.envConfig.STATS_RABBITMQ_QUEUE);
+  get QueueStatsRoutes(): string[] {
+    return this.envConfig.STATS_RABBITMQ_ROUTES.split('|');
   }
 
-  get QueueGlobeHost(): string {
-    return String(this.envConfig.GLOBE_RABBITMQ_HOST);
+  get QueueGlobeUri(): string {
+    return String(this.envConfig.GLOBE_RABBITMQ_URI);
   }
 
-  get QueueGlobeUser(): string {
-    return String(this.envConfig.GLOBE_RABBITMQ_USER);
+  get QueueGlobeExchange(): string {
+    return String(this.envConfig.GLOBE_RABBITMQ_EXCHANGE);
   }
 
-  get QueueGlobePassword(): string {
-    return String(this.envConfig.GLOBE_RABBITMQ_PASS);
+  get QueueGlobeExchangeType(): string {
+    return String(this.envConfig.GLOBE_RABBITMQ_EXCHANGE_TYPE);
   }
 
-  get QueueGlobleName(): string {
-    return String(this.envConfig.GLOBE_RABBITMQ_QUEUE);
+  get QueueGlobeRoute(): string {
+    return String(this.envConfig.GLOBE_RABBITMQ_ROUTE);
   }
 
   get DatabaseType(): string {
     return String(this.envConfig.LIVESYNC_DB_TYPE);
   }
+
   get DatabaseHost(): string {
     return String(this.envConfig.LIVESYNC_DB_HOST);
   }
+
   get DatabasePort(): number {
     return Number(this.envConfig.LIVESYNC_DB_PORT);
   }
+
   get DatabaseUser(): string {
     return String(this.envConfig.LIVESYNC_DB_USER);
   }
+
   get DatabasePass(): string {
     return String(this.envConfig.LIVESYNC_DB_PASS);
   }
+
   get DatabaseName(): string {
     return String(this.envConfig.LIVESYNC_DB_NAME);
   }
+
+  get DatabaseEntities(): string {
+    return String(this.envConfig.LIVESYNC_ENTITIES);
+  }
+
   get DatabaseSync(): boolean {
     return Boolean(this.envConfig.LIVESYNC_DB_SYNC);
   }
@@ -119,16 +134,7 @@ export class ConfigService {
     return String(this.envConfig.LIVESYNC_MONGODB_URI);
   }
 
-  get QueueConfig(): any {
-    return {
-      transport: Transport.RMQ,
-      options: {
-        urls: [this.QueueHost],
-        queue: this.QueueName,
-        user: this.QueueUser,
-        pass: this.QueuePassword,
-        queueOptions: { durable: true },
-      },
-    };
+  getRoute(name: string): string {
+    return this.QueueStatsRoutes.find(c => c.includes(name));
   }
 }
