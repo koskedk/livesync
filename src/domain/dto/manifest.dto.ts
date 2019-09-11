@@ -1,4 +1,4 @@
-export interface ManifestDto {
+export class ManifestDto {
   id?: string;
   facilityCode?: number;
   facilityName?: string;

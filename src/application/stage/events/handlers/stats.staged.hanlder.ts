@@ -13,6 +13,8 @@ import { Stats } from '../../../../domain/stats.entity';
 
 import { MessagingService } from '../../../../infrastructure/messging/messaging.service';
 import { ConfigService } from '../../../../config/config.service';
+import { plainToClass } from 'class-transformer';
+import { StatsDto } from '../../../../domain/dto/stats.dto';
 
 @EventsHandler(StatsStagedEvent)
 export class StatsStagedHanlder implements IEventHandler<StatsStagedEvent> {
@@ -33,6 +35,8 @@ export class StatsStagedHanlder implements IEventHandler<StatsStagedEvent> {
 
     for (const stats of statsz) {
       try {
+        stats.docket = JSON.parse(stats.docket);
+        stats.stats = JSON.parse(stats.stats);
         const result = await this.client.publish(
           JSON.stringify(stats),
           this.config.QueueStatsExchange,

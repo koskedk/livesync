@@ -11,6 +11,9 @@ import { GetManifestQuery } from '../../queries/get-manifest-query';
 import { Manifest } from '../../../../domain/manifest.entity';
 import { MessagingService } from '../../../../infrastructure/messging/messaging.service';
 import { ConfigService } from '../../../../config/config.service';
+import { plainToClass } from 'class-transformer';
+import { StatsDto } from '../../../../domain/dto/stats.dto';
+import { ManifestDto } from '../../../../domain/dto/manifest.dto';
 
 @EventsHandler(ManifestStagedEvent)
 export class ManifestStagedHandler

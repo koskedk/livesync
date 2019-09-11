@@ -1,9 +1,0 @@
-{
-  "type": "mssql",
-  "host": "127.0.0.1",
-  "username": "sa",
-  "password": "M@un1983",
-  "database": "livesync",
-  "entities": ["dist/**/*.entity{.ts,.js}"],
-  "synchronize": true
-}
