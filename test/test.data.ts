@@ -13,7 +13,7 @@ export const getTestManifests = () => {
       '    "logDate": "2019-08-01",\n' +
       '    "buildDate": "2019-08-01",\n' +
       '    "patientCount": 40,\n' +
-      '    "cargo": "",\n' +
+      '    "cargo": {"EmrName":"Demo EMR","EmrVersion":"v1.0.0.0","LastLoginDate":"1983-07-04T00:00:00","LastMoH731RunDate":"1983-07-04T00:00:00","DateExtracted":"2019-12-03T14:49:01.703992","Id":"0f78f8fe-6396-4bf1-91da-ab1800c2bd90"},\n' +
       '    "isCurrent": true\n' +
       '  },\n' +
       '  {\n' +
@@ -26,7 +26,7 @@ export const getTestManifests = () => {
       '    "logDate": "2019-08-02",\n' +
       '    "buildDate": "2019-08-02",\n' +
       '    "patientCount": 40,\n' +
-      '    "cargo": "",\n' +
+      '    "cargo": {"EmrName":"Demo EMR","EmrVersion":"v1.0.0.0","LastLoginDate":"1983-07-04T00:00:00","LastMoH731RunDate":"1983-07-04T00:00:00","DateExtracted":"2019-12-03T14:49:01.703992","Id":"0f78f8fe-6396-4bf1-91da-ab1800c2bd90"},\n' +
       '    "isCurrent": false\n' +
       '  },\n' +
       '  {\n' +
@@ -39,7 +39,7 @@ export const getTestManifests = () => {
       '    "logDate": "2019-08-02",\n' +
       '    "buildDate": "2019-08-02",\n' +
       '    "patientCount": 50,\n' +
-      '    "cargo": "",\n' +
+      '    "cargo": {"EmrName":"Demo EMR","EmrVersion":"v1.0.0.0","LastLoginDate":"1983-07-04T00:00:00","LastMoH731RunDate":"1983-07-04T00:00:00","DateExtracted":"2019-12-03T14:49:01.703992","Id":"0f78f8fe-6396-4bf1-91da-ab1800c2bd90"},\n' +
       '    "isCurrent": true\n' +
       '  },\n' +
       '  {\n' +
@@ -52,7 +52,7 @@ export const getTestManifests = () => {
       '    "logDate": "2019-08-01",\n' +
       '    "buildDate": "2019-08-01",\n' +
       '    "patientCount": 50,\n' +
-      '    "cargo": "",\n' +
+      '    "cargo": {"EmrName":"Demo EMR","EmrVersion":"v1.0.0.0","LastLoginDate":"1983-07-04T00:00:00","LastMoH731RunDate":"1983-07-04T00:00:00","DateExtracted":"2019-12-03T14:49:01.703992","Id":"0f78f8fe-6396-4bf1-91da-ab1800c2bd90"},\n' +
       '    "isCurrent": false\n' +
       '  }\n' +
       ']',
