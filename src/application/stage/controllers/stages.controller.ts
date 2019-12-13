@@ -7,6 +7,7 @@ import { SummaryDto } from '../../../domain/dto/summary.dto';
 import { StageManifestCommand } from '../commands/stage-manifest.command';
 import { StageStatsCommand } from '../commands/stage-stats.command';
 import { ClientProxy, EventPattern } from '@nestjs/microservices';
+import { StageMetricCommand } from '../commands/stage-metric.command';
 
 @Controller('stages')
 export class StagesController {
@@ -40,6 +41,22 @@ export class StagesController {
         statsDto.stats,
         statsDto.updated,
         statsDto.manifestId,
+      ),
+    );
+  }
+
+  @Post('metric')
+  async logMetric(@Body() metrics: any[]) {
+    metrics.forEach(metric =>
+      this.commandBus.execute(
+        new StageMetricCommand(
+          metric.id,
+          metric.facilityCode,
+          metric.facilityName,
+          metric.cargo,
+          metric.cargoType,
+          metric.facilityManifestId,
+        ),
       ),
     );
   }
