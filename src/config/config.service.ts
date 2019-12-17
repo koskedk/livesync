@@ -33,7 +33,9 @@ export class ConfigService {
       ),
       STATS_RABBITMQ_EXCHANGE: Joi.string().default('stats.exchange'),
       STATS_RABBITMQ_EXCHANGE_TYPE: Joi.string().default('direct'),
-      STATS_RABBITMQ_ROUTES: Joi.string().default('manifest.route|stats.route'),
+      STATS_RABBITMQ_ROUTES: Joi.string().default(
+        'manifest.route|stats.route|metric.route',
+      ),
       GLOBE_RABBITMQ_URI: Joi.string().default(
         'amqp://guest:guest@localhost:5672/spot',
       ),
