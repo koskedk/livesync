@@ -6,6 +6,7 @@ import { Logger } from '@nestjs/common';
 import { UpdateStatusCommand } from '../update-status.command';
 import { Manifest } from '../../../../domain/manifest.entity';
 import { Stats } from '../../../../domain/stats.entity';
+import { Metric } from '../../../../domain/metric.entity';
 
 @CommandHandler(UpdateStatusCommand)
 export class UpdateStatusHandler
@@ -15,6 +16,8 @@ export class UpdateStatusHandler
     private readonly manifestRepository: Repository<Manifest>,
     @InjectRepository(Stats)
     private readonly statsRepository: Repository<Stats>,
+    @InjectRepository(Metric)
+    private readonly metricRepository: Repository<Metric>,
     private readonly eventBus: EventBus,
   ) {}
 
@@ -34,6 +37,15 @@ export class UpdateStatusHandler
         Logger.log(`${result.facilityCode} STATS SENT >>>`);
       } else {
         Logger.error(`STATS ${command.id} NOT SENT`);
+      }
+    }
+
+    if (command.asset === Metric.name) {
+      const result = await this.updateMetricsStatus(command);
+      if (result) {
+        Logger.log(`${result.facilityCode} Metric SENT >>>`);
+      } else {
+        Logger.error(`Metric ${command.id} NOT SENT`);
       }
     }
   }
@@ -63,6 +75,20 @@ export class UpdateStatusHandler
         existingStats.markAsFailed(command.statusInfo);
       }
       return await this.statsRepository.save(existingStats);
+    }
+  }
+
+  async updateMetricsStatus(command: UpdateStatusCommand): Promise<Metric> {
+    const existingMetric = await this.metricRepository.findOne(command.id);
+
+    if (existingMetric) {
+      if (command.status === 'SENT') {
+        existingMetric.markAsSent();
+      }
+      if (command.status === 'ERROR') {
+        existingMetric.markAsFailed(command.statusInfo);
+      }
+      return await this.metricRepository.save(existingMetric);
     }
   }
 }
