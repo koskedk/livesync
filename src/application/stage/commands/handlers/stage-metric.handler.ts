@@ -20,24 +20,29 @@ export class StageMetricHandler implements ICommandHandler<StageMetricCommand> {
   ) {}
 
   async execute(command: StageMetricCommand): Promise<any> {
-    const metric = plainToClass(Metric, command);
-    if (metric) {
-      const existing = await this.repository.findOne(metric.id);
-      if (existing) {
-        Logger.log(
-          `Metric already exists ${existing.facilityCode} - ${existing.facilityName}`,
-        );
-        return existing;
+    let posted: any[] = [];
+    for (const m of command.metrics) {
+      const metric = plainToClass(Metric, m);
+      if (metric) {
+        const existing = await this.repository.findOne(metric.id);
+        if (!existing) {
+          metric.initialize();
+          const saved = await this.repository.save(metric);
+          Logger.log(
+            `Metric logged: ${saved.facilityCode} - ${saved.facilityName}`,
+          );
+          this.publisher.mergeObjectContext(metric).commit();
+          posted.push(saved);
+        } else {
+          Logger.log(
+            `Metric already exists ${existing.facilityCode} - ${existing.facilityName}`,
+          );
+          posted.push(existing);
+          continue;
+        }
       }
-      metric.initialize();
-      const saved = await this.repository.save(metric);
-      Logger.log(
-        `Metric logged: ${saved.facilityCode} - ${saved.facilityName}`,
-      );
-
-      this.publisher.mergeObjectContext(metric).commit();
-      return saved;
+      // Logger.error('Failed to read metric');
     }
-    Logger.error('Failed to read metric');
+    return posted;
   }
 }

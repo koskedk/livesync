@@ -47,17 +47,6 @@ export class StagesController {
 
   @Post('metric')
   async logMetric(@Body() metrics: any[]) {
-    metrics.forEach(metric =>
-      this.commandBus.execute(
-        new StageMetricCommand(
-          metric.id,
-          metric.facilityCode,
-          metric.facilityName,
-          metric.cargo,
-          metric.cargoType,
-          metric.facilityManifestId,
-        ),
-      ),
-    );
+    this.commandBus.execute(new StageMetricCommand(metrics));
   }
 }

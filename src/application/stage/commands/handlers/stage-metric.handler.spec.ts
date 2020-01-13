@@ -17,7 +17,7 @@ describe('Stage Metric Tests', () => {
   let module: TestingModule;
   let commandBus: CommandBus;
   let handler: StageMetricHandler;
-  const data = getTestMetrics()[0];
+  const data = getTestMetrics();
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
@@ -42,9 +42,9 @@ describe('Stage Metric Tests', () => {
   });
 
   it('should Stage Metric', async () => {
-    const command = plainToClass(StageMetricCommand, data);
+    const command = new StageMetricCommand(data);
     const result = await commandBus.execute(command);
-    expect(result).not.toBeNull();
-    Logger.log(result.name);
+    expect(result.length).toBeGreaterThan(0);
+    // Logger.log(result.name);
   });
 });
