@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { AmqpConnection } from '@nestjs-plus/rabbitmq';
+import { Injectable, Logger } from '@nestjs/common';
+import { AmqpConnection, RabbitSubscribe } from '@nestjs-plus/rabbitmq';
 import { ConfigService } from '../../config/config.service';
 
 @Injectable()
@@ -29,8 +29,7 @@ export class MessagingService {
   })
   public async subscribeToGlobe(data: any) {
     const message = JSON.parse(data);
-    const messageBody = JSON.parse(message.body);
     Logger.log(`+++++++++++ ${message.label} +++++++++`);
-    Logger.log(`request ${messageBody.name}`);
+    Logger.log(`request ${message.body.code}`);
   }
 }
