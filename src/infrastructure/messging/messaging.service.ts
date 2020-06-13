@@ -21,4 +21,16 @@ export class MessagingService {
       return false;
     }
   }
+
+  @RabbitSubscribe({
+    exchange: 'stats.exchange',
+    routingKey: 'syncstats.route',
+    queue: 'syncstats.queue',
+  })
+  public async subscribeToGlobe(data: any) {
+    const message = JSON.parse(data);
+    const messageBody = JSON.parse(message.body);
+    Logger.log(`+++++++++++ ${message.label} +++++++++`);
+    Logger.log(`request ${messageBody.name}`);
+  }
 }
