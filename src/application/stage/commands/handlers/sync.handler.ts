@@ -38,6 +38,7 @@ export class SyncHandler implements ICommandHandler<SyncCommand> {
       .getOne();
 
     if (stats) {
+      stats.manifestId = command.manifet.id;
       try {
         stats.docket = JSON.parse(stats.docket);
         stats.stats = JSON.parse(stats.stats);
