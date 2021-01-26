@@ -19,27 +19,34 @@ import { StageMetricHandler } from './commands/handlers/stage-metric.handler';
 import { Metric } from '../../domain/metric.entity';
 import { MetricStagedHandler } from './events/handlers/metric.staged.handler';
 import { GetMetricHandler } from './queries/handlers/get-metric.handler';
+import { StageIndicatorHandler } from './commands/handlers/stage-indicator.handler';
+import { Indicator } from '../../domain/indicator.entity';
+import { IndicatorStagedHandler } from './events/handlers/indicator.staged.handler';
+import { GetIndicatorHandler } from './queries/handlers/get-indicator.handler';
 
 @Module({
   imports: [
     MessagingModule,
     ConfigModule,
     CqrsModule,
-    TypeOrmModule.forFeature([Manifest, Stats, Metric]),
+    TypeOrmModule.forFeature([Manifest, Stats, Metric, Indicator]),
   ],
   // @ts-ignore
   providers: [
     StageManifestHandler,
     StageStatsHandler,
     StageMetricHandler,
+    StageIndicatorHandler,
     SyncHandler,
     UpdateStatusHandler,
     ManifestStagedHandler,
     StatsStagedHanlder,
     MetricStagedHandler,
+    IndicatorStagedHandler,
     GetManifestHandler,
     GetStatsHandler,
     GetMetricHandler,
+    GetIndicatorHandler,
     MessagingService,
   ],
   controllers: [StagesController],
