@@ -31,6 +31,7 @@
     "amqplib": "^0.5.5",
     "class-transformer": "^0.2.3",
     "dotenv": "^8.1.0",
+    "fast-glob": "^3.2.2",
     "mssql": "^5.1.0",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",

@@ -1,4 +1,65 @@
 import * as uuid from 'uuid';
+import * as fg from 'fast-glob';
+import * as fs from 'fs';
+import { Logger } from '@nestjs/common';
+import { plainToClass } from 'class-transformer';
+import { Manifest } from '../src/domain/manifest.entity';
+
+const pattern = '**/*.test.json';
+const dockets = ['NDWH', 'HTS', 'MPI', 'MGS'];
+
+const getFiles = async () => {
+  let files: string[] = [];
+  files = await fg([pattern], { dot: true });
+  return files;
+};
+
+const addDays = (days: number, date: Date = new Date()): Date => {
+  date.setDate(date.getDate() + days);
+  return date;
+};
+
+export const getManifests = async () => {
+  const seedFiles = await getFiles();
+  const fileToParse = seedFiles.find((f) =>
+    f.includes('manifest'.toLowerCase()),
+  );
+  if (fileToParse) {
+    Logger.log(`reading seed [${fileToParse}]`);
+    const contents = fs.readFileSync(fileToParse).toString();
+    const data: Manifest[] = JSON.parse(contents);
+    dockets.forEach((docket) => {
+      data.forEach((m) => {
+        m.id = uuid.v1();
+        m.docket = docket;
+        m.buildDate = m.logDate = addDays(-1);
+        m.patientCount = 40;
+      });
+    });
+    return plainToClass(Manifest, data);
+  }
+  return [];
+};
+
+export const getStats = async () => {
+  const seedFiles = await getFiles();
+  const fileToParse = seedFiles.find((f) => f.includes('stat'.toLowerCase()));
+  if (fileToParse) {
+    Logger.log(`reading seed [${fileToParse}]`);
+    const contents = fs.readFileSync(fileToParse).toString();
+    const data: Manifest[] = JSON.parse(contents);
+    dockets.forEach((docket) => {
+      data.forEach((m) => {
+        m.id = uuid.v1();
+        m.docket = docket;
+        m.buildDate = m.logDate = addDays(-1);
+        m.patientCount = 40;
+      });
+    });
+    return plainToClass(Manifest, data);
+  }
+  return [];
+};
 
 export const getTestManifests = () => {
   return JSON.parse(
