@@ -3,7 +3,7 @@ export class IndicatorDto {
   facilityCode?: number;
   facilityName?: string;
   name?: string;
-  value?: number;
+  value?: string;
   indicatorDate?: Date;
   stage?: string;
   facilityManifestId?: string;

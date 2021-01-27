@@ -221,7 +221,7 @@ export const getTestIndicators = () => {
       '    "facilityCode": 12618,\n' +
       '    "facilityName": "Mwala Hospital",\n' +
       '    "name": "TX_CURR",\n' +
-      '    "value": 765,\n' +
+      '    "value": "765",\n' +
       '    "indicatorDate": "2021-01-26T13:33:26.1900597",\n' +
       '    "stage": "EMR",\n' +
       '    "facilityManifestId": "d47cb9a6-1dc2-11ea-978f-2e728ce88125"\n' +

@@ -17,8 +17,8 @@ export class Indicator extends AggregateRoot {
   @Column({ type: 'text'})
   name: string;
 
-  @Column({ type: 'int' })
-  value: number;
+  @Column({ type: 'text' })
+  value: string;
 
   @Column({ type: 'datetime', nullable: true })
   indicatorDate: Date;
