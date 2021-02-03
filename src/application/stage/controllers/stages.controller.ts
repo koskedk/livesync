@@ -4,6 +4,7 @@ import { StatsDto } from '../../../domain/dto/stats.dto';
 import { StageManifestCommand } from '../commands/stage-manifest.command';
 import { StageStatsCommand } from '../commands/stage-stats.command';
 import { StageMetricCommand } from '../commands/stage-metric.command';
+import { StageIndicatorCommand } from '../commands/stage-indicator.command';
 
 @Controller('stages')
 export class StagesController {
@@ -44,5 +45,10 @@ export class StagesController {
   @Post('metric')
   async logMetric(@Body() metrics: any[]) {
     this.commandBus.execute(new StageMetricCommand(metrics));
+  }
+
+  @Post('indicator')
+  async logIndicator(@Body() indicators: any[]) {
+    this.commandBus.execute(new StageIndicatorCommand(indicators));
   }
 }
