@@ -5,6 +5,7 @@ import { StageManifestCommand } from '../commands/stage-manifest.command';
 import { StageStatsCommand } from '../commands/stage-stats.command';
 import { StageMetricCommand } from '../commands/stage-metric.command';
 import { StageIndicatorCommand } from '../commands/stage-indicator.command';
+import { StageHandshakeCommand } from '../commands/stage-handshake.command';
 
 @Controller('stages')
 export class StagesController {
@@ -15,18 +16,23 @@ export class StagesController {
 
   @Post('manifest')
   async logManifest(@Body() manifest: any) {
-    return this.commandBus.execute(
-      new StageManifestCommand(
-        manifest.id,
-        manifest.facilityCode,
-        manifest.facilityName,
-        manifest.docket,
-        manifest.logDate,
-        manifest.buildDate,
-        manifest.patientCount,
-        manifest.cargo,
-      ),
+    let cmd = new StageManifestCommand(
+      manifest.id,
+      manifest.facilityCode,
+      manifest.facilityName,
+      manifest.docket,
+      manifest.logDate,
+      manifest.buildDate,
+      manifest.patientCount,
+      manifest.cargo,
     );
+
+    cmd.session = manifest.session;
+    cmd.start = manifest.start;
+    cmd.end = manifest.end;
+    cmd.tag = manifest.tag;
+
+    return this.commandBus.execute(cmd);
   }
 
   @Post('stats')
@@ -50,5 +56,18 @@ export class StagesController {
   @Post('indicator')
   async logIndicator(@Body() indicators: any[]) {
     this.commandBus.execute(new StageIndicatorCommand(indicators));
+  }
+
+  @Post('handshake')
+  async logHandshake(@Body() manifest: any) {
+    return this.commandBus.execute(
+      new StageHandshakeCommand(
+        manifest.id,
+        manifest.session,
+        manifest.start,
+        manifest.end,
+        manifest.tag,
+      ),
+    );
   }
 }

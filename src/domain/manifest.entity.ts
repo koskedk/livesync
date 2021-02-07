@@ -37,6 +37,18 @@ export class Manifest extends AggregateRoot {
   @Column({ type: 'text', nullable: true })
   statusInfo: string;
 
+  @Column({ type: 'datetime', nullable: true })
+  start: Date;
+
+  @Column({ type: 'datetime', nullable: true })
+  end: Date;
+
+  @Column({ type: 'uuid', nullable: true })
+  session: string;
+
+  @Column({ type: 'text', nullable: true })
+  tag: string;
+
   constructor() {
     super();
   }
@@ -56,5 +68,11 @@ export class Manifest extends AggregateRoot {
     this.status = 'ERROR';
     this.statusDate = new Date();
     this.statusInfo = error;
+  }
+
+  updateSession(session: string, start: Date, end: Date) {
+    this.session = session;
+    this.start = start;
+    this.end = end;
   }
 }
