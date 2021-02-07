@@ -1,6 +1,7 @@
 import { ManifestStagedEvent } from '../application/stage/events/manifest.staged.event';
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { AggregateRoot } from '@nestjs/cqrs';
+import { HandshakeStagedEvent } from '../application/stage/events/handshake.staged.event';
 
 @Entity()
 export class Manifest extends AggregateRoot {
@@ -70,9 +71,8 @@ export class Manifest extends AggregateRoot {
     this.statusInfo = error;
   }
 
-  updateSession(session: string, start: Date, end: Date) {
-    this.session = session;
-    this.start = start;
+  updateSession(end: Date) {
     this.end = end;
+    this.apply(new HandshakeStagedEvent(this.id));
   }
 }
