@@ -22,21 +22,27 @@ export class StageHandshakeHandler
   ) {}
 
   async execute(command: StageHandshakeCommand): Promise<any> {
-    Logger.log(
-      `procssing Handshake logged: ${command.id}`,
-    );
-    const existing = await this.repository.findOne(command.id);
-    if (existing) {
-      let manifest=plainToClass(Manifest,existing)
-      manifest.updateSession(command.end);
-      await this.repository.save(manifest);
-      Logger.log(
-        `Handshake logged: ${manifest.facilityCode} - ${manifest.facilityName}`,
-      );
 
-      this.publisher.mergeObjectContext(manifest).commit();
-      return manifest;
+    for (const h of command.handshakes) {
+      Logger.log(
+        `procssing Handshake logged: ${h.id}`,
+      );
+      const existing = await this.repository.findOne(h.id);
+      if (existing) {
+        let manifest=plainToClass(Manifest,existing)
+        manifest.updateSession(h.end);
+        await this.repository.save(manifest);
+        Logger.log(
+          `Handshake logged: ${manifest.facilityCode} - ${manifest.facilityName}`,
+        );
+
+        this.publisher.mergeObjectContext(manifest).commit();
+      }
+      Logger.error('Failed to read manifest');
     }
-    Logger.error('Failed to read manifest');
+
+    return command.handshakes;
+
+
   }
 }

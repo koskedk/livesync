@@ -61,13 +61,7 @@ export class StagesController {
   @Post('handshake')
   async logHandshake(@Body() manifest: any) {
     return this.commandBus.execute(
-      new StageHandshakeCommand(
-        manifest.id,
-        manifest.session,
-        manifest.start,
-        manifest.end,
-        manifest.tag,
-      ),
+      new StageHandshakeCommand(manifest),
     );
   }
 }
