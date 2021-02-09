@@ -12,11 +12,12 @@ export class StagesController {
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
-  ) {}
+  ) {
+  }
 
   @Post('manifest')
   async logManifest(@Body() manifest: any) {
-    let cmd = new StageManifestCommand(
+    const cmd = new StageManifestCommand(
       manifest.id,
       manifest.facilityCode,
       manifest.facilityName,
@@ -59,9 +60,7 @@ export class StagesController {
   }
 
   @Post('handshake')
-  async logHandshake(@Body() manifest: any) {
-    return this.commandBus.execute(
-      new StageHandshakeCommand(manifest),
-    );
+  async logHandshake(@Body() handshakes: any) {
+    return this.commandBus.execute(new StageHandshakeCommand(handshakes));
   }
 }

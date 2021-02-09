@@ -19,30 +19,21 @@ export class StageHandshakeHandler
     @InjectRepository(Manifest)
     private readonly repository: Repository<Manifest>,
     private readonly publisher: EventPublisher,
-  ) {}
+  ) {
+  }
 
   async execute(command: StageHandshakeCommand): Promise<any> {
-
-    for (const h of command.handshakes) {
-      Logger.log(
-        `procssing Handshake logged: ${h.id}`,
-      );
-      const existing = await this.repository.findOne(h.id);
+    for (const handshake of command.handshakes) {
+      Logger.log(`procssing Handshake logged: ${handshake.id}`);
+      const existing = await this.repository.findOne(handshake.id);
       if (existing) {
-        let manifest=plainToClass(Manifest,existing)
-        manifest.updateSession(h.end);
+        const manifest = plainToClass(Manifest, existing);
+        manifest.updateSession(handshake.end);
         await this.repository.save(manifest);
-        Logger.log(
-          `Handshake logged: ${manifest.facilityCode} - ${manifest.facilityName}`,
-        );
-
+        Logger.log(`Handshake ${manifest.facilityCode}-${manifest.facilityName}`);
         this.publisher.mergeObjectContext(manifest).commit();
       }
-      Logger.error('Failed to read manifest');
     }
-
     return command.handshakes;
-
-
   }
 }
