@@ -7,6 +7,7 @@ import { UpdateStatusCommand } from '../update-status.command';
 import { Manifest } from '../../../../domain/manifest.entity';
 import { Stats } from '../../../../domain/stats.entity';
 import { Metric } from '../../../../domain/metric.entity';
+import { Indicator } from '../../../../domain/indicator.entity';
 
 @CommandHandler(UpdateStatusCommand)
 export class UpdateStatusHandler
@@ -18,6 +19,8 @@ export class UpdateStatusHandler
     private readonly statsRepository: Repository<Stats>,
     @InjectRepository(Metric)
     private readonly metricRepository: Repository<Metric>,
+    @InjectRepository(Indicator)
+    private readonly indicatorRepository: Repository<Indicator>,
     private readonly eventBus: EventBus,
   ) {}
 
@@ -46,6 +49,15 @@ export class UpdateStatusHandler
         Logger.log(`${result.facilityCode} Metric SENT >>>`);
       } else {
         Logger.error(`Metric ${command.id} NOT SENT`);
+      }
+    }
+
+    if (command.asset === Indicator.name) {
+      const result = await this.updateIndicatorsStatus(command);
+      if (result) {
+        Logger.log(`${result.facilityCode} Indicator SENT >>>`);
+      } else {
+        Logger.error(`Indicator ${command.id} NOT SENT`);
       }
     }
   }
@@ -89,6 +101,24 @@ export class UpdateStatusHandler
         existingMetric.markAsFailed(command.statusInfo);
       }
       return await this.metricRepository.save(existingMetric);
+    }
+  }
+
+  async updateIndicatorsStatus(
+    command: UpdateStatusCommand,
+  ): Promise<Indicator> {
+    const existingIndicator = await this.indicatorRepository.findOne(
+      command.id,
+    );
+
+    if (existingIndicator) {
+      if (command.status === 'SENT') {
+        existingIndicator.markAsSent();
+      }
+      if (command.status === 'ERROR') {
+        existingIndicator.markAsFailed(command.statusInfo);
+      }
+      return await this.indicatorRepository.save(existingIndicator);
     }
   }
 }
